@@ -46,7 +46,7 @@ const FindRestaurant = (props) => {
     //for the post URL, make sure its your IP adress. Localhost only works for iPhone, not android.
     let data;
     await axios
-      .post("http://192.168.1.11:3000/api/search", {
+      .post("https://hidden-lowlands-65076.herokuapp.com/api/search", {
         term: searchQuery,
         latitude: userLocation.coords.latitude,
         longitude: userLocation.coords.longitude,
