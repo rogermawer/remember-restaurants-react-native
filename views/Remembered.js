@@ -1,10 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import RememberedResults from "../components/RememberedResults";
 
 const Remembered = (props) => {
   return (
     <View style={styles.container}>
-      <Text>This is remembered page</Text>
+      <RememberedResults restaurantData={props.allSavedRestaurants} />
     </View>
   );
 };
