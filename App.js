@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import * as Location from "expo-location";
 
 import FindRestaurant from "./views/FindRestaurant";
@@ -36,6 +36,12 @@ export default function App() {
 
   const updateSavedRestaurants = (restaurant) => {
     setAllSavedRestaurants([...allSavedRestaurants, restaurant]);
+    //logic for if you already saved one goes here...
+    savedRestaurantAlert();
+  };
+
+  const savedRestaurantAlert = () => {
+    Alert.alert("Saved!", "congrats, you saved one", [{ text: "ok" }]);
   };
 
   const Tab = createBottomTabNavigator();

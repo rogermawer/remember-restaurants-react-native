@@ -3,11 +3,19 @@ import { StyleSheet, Text, View } from "react-native";
 import RememberedResults from "../components/RememberedResults";
 
 const Remembered = (props) => {
-  return (
-    <View style={styles.container}>
-      <RememberedResults restaurantData={props.allSavedRestaurants} />
+  let currentView = (
+    <View>
+      <Text>You haven't saved any restaurants yet! Try saving one.</Text>
     </View>
   );
+
+  if (props.allSavedRestaurants.length > 0) {
+    currentView = (
+      <RememberedResults restaurantData={props.allSavedRestaurants} />
+    );
+  }
+
+  return <View style={styles.container}>{currentView}</View>;
 };
 
 const styles = StyleSheet.create({

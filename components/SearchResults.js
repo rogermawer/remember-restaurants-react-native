@@ -19,6 +19,7 @@ const SearchResults = (props) => {
     setModalVisible(true);
     setSelectedRestaurant(restaurantObject);
   };
+
   let showModalView;
   if (selectedRestaurant) {
     showModalView = (

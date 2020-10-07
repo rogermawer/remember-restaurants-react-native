@@ -51,7 +51,7 @@ const FindRestaurant = (props) => {
     }
   }
 
-  //current view. i.e., either search input
+  //show search input view on start up
   let currentView = (
     <View style={styles.container}>
       <SearchInput
@@ -77,6 +77,8 @@ const FindRestaurant = (props) => {
       </View>
     </View>
   );
+
+  // if search returns results, display all of them
   if (searchResults.length > 0 && randomRestaurant === null) {
     currentView = (
       <View style={styles.container}>
@@ -92,7 +94,7 @@ const FindRestaurant = (props) => {
     );
   }
 
-  // conditional render logic
+  // if random restaurant was found, open a modal with its info
   let modalView;
   if (randomRestaurant) {
     modalView = (
