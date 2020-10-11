@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+
+//dependencies
 import StarRating from "react-native-star-rating";
 import openMap from "react-native-open-maps";
+
+//components
+import DisplayReviews from "./DisplayReviews";
 
 const ModalPopUp = (props) => {
   const sendUserToLocation = (lat, long, address, name) => {
@@ -49,6 +54,9 @@ const ModalPopUp = (props) => {
             >
               {props.selectedRestaurant.review_count}
             </Text>
+          </View>
+          <View>
+            <DisplayReviews idOfRestaurant={props.selectedRestaurant.alias} />
           </View>
         </View>
         <View style={styles.buttonContainer}>

@@ -21,7 +21,7 @@ const FindRestaurant = (props) => {
   };
 
   async function searchForRestaurant(searchQuery) {
-    //for the post URL, make sure its your IP adress. Localhost only works for iPhone, not android.
+    //for the post URL, make sure its your IP adress for development. Localhost only works for iPhone, not android.
     let data;
     await axios
       .post("http://192.168.1.11:3000/api/search", {
