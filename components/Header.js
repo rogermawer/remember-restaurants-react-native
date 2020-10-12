@@ -17,9 +17,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 120,
     paddingTop: 40,
+    paddingHorizontal: 10,
   },
   bigText: {
     fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
     color: "black",
   },
   navContainer: {

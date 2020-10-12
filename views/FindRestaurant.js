@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import SearchInput from "../components/SearchInput";
 import axios from "axios";
 import SearchResults from "../components/SearchResults";
 import ModalPopUp from "../components/ModalPopUp";
-import * as Location from "expo-location";
 
 const FindRestaurant = (props) => {
   const [searchResults, storeSearchResults] = useState([]);
-  const [userLocation, setUserLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchError, setSearchError] = useState(false);
 
   const closeModalHandler = () => {
     setModalVisible(false);
@@ -22,41 +20,25 @@ const FindRestaurant = (props) => {
     props.addToSavedRestaurants(restaurant);
   };
 
-  const getLocation = () => {
-    if (!userLocation) {
-      manuallyGetLocation();
-    }
-  };
-  getLocation();
-
-  async function manuallyGetLocation() {
-    let { status } = await Location.requestPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-    }
-    try {
-      let location = await Location.getCurrentPositionAsync({});
-      setUserLocation(location);
-    } catch (e) {
-      setErrorMsg("Couldn't find your location. Is data on?");
-    }
-  }
+  useEffect(() => {
+    props.manuallyGetLocation();
+  }, [searchResults]);
 
   async function searchForRestaurant(searchQuery) {
-    //for the post URL, make sure its your IP adress. Localhost only works for iPhone, not android.
+    //for the post URL, make sure its your IP adress for development. Localhost only works for iPhone, not android.
     let data;
     await axios
       .post("https://hidden-lowlands-65076.herokuapp.com/api/search", {
         term: searchQuery,
-        latitude: userLocation.coords.latitude,
-        longitude: userLocation.coords.longitude,
+        latitude: props.userLocation.coords.latitude,
+        longitude: props.userLocation.coords.longitude,
       })
       .then((res) => {
         storeSearchResults(res.data);
         data = res.data;
       })
       .catch((err) => {
-        setErrorMsg("error searching");
+        setSearchError("error searching");
       });
     return data;
   }
@@ -64,7 +46,7 @@ const FindRestaurant = (props) => {
   async function getRandomRestaurant(searchQuery) {
     let foundRestaurants = await searchForRestaurant(searchQuery);
     if (!foundRestaurants || foundRestaurants.length < 1) {
-      setErrorMsg("either server error or didnt find any restaurants");
+      setSearchError("either server error or didnt find any restaurants");
     } else {
       setRandomRestaurant(
         foundRestaurants[Math.floor(Math.random() * foundRestaurants.length)]
@@ -73,32 +55,33 @@ const FindRestaurant = (props) => {
     }
   }
 
-  //current view. i.e., what you see on this screen
+  //show search input view on start up
   let currentView = (
     <View style={styles.container}>
       <SearchInput
         style={styles.container}
         searchForRestaurant={searchForRestaurant}
-        manuallyGetLocation={manuallyGetLocation}
         getRandomRestaurant={getRandomRestaurant}
       />
-      {userLocation ? (
+      {props.userLocation ? (
         <View>
-          <Text>Your Lat is: {userLocation.coords.latitude}</Text>
-          <Text>Your Long is: {userLocation.coords.longitude}</Text>
-          <Text>Timestamp: {userLocation.timestamp}</Text>
+          <Text>Your Lat is: {props.userLocation.coords.latitude}</Text>
+          <Text>Your Long is: {props.userLocation.coords.longitude}</Text>
+          <Text>Timestamp: {props.userLocation.timestamp}</Text>
         </View>
       ) : (
         <View>
-          <Text>{errorMsg}</Text>
+          <Text>{props.locationError}</Text>
         </View>
       )}
-      <Button title="Update Location" onPress={manuallyGetLocation} />
+      <Button title="Update Location" onPress={props.manuallyGetLocation} />
       <View>
-        <Text>{errorMsg}</Text>
+        <Text>{searchError}</Text>
       </View>
     </View>
   );
+
+  // if search returns results, display all of them
   if (searchResults.length > 0 && randomRestaurant === null) {
     currentView = (
       <View style={styles.container}>
@@ -114,7 +97,7 @@ const FindRestaurant = (props) => {
     );
   }
 
-  // conditional render logic
+  // if random restaurant was found, open a modal with its info
   let modalView;
   if (randomRestaurant) {
     modalView = (

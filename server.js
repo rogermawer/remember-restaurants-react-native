@@ -31,6 +31,17 @@ app.post("/api/search", [], (req, res) => {
     });
 });
 
+app.post("/api/reviews", (req, res) => {
+  client
+    .reviews(req.body.restaurantName)
+    .then((response) => {
+      res.send(response.body);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 //process.env.PORT allows to look on all ports.
 app.listen(process.env.PORT || port, () =>
   console.log(`Listening on port ${port}!`)
