@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Alert } from "react-native";
 import * as Location from "expo-location";
 
@@ -15,13 +15,16 @@ export default function App() {
   const [locationError, setLocationError] = useState(null);
 
   const getLocation = () => {
-    if (!userLocation) {
-      manuallyGetLocation();
-    }
+    manuallyGetLocation();
   };
-  getLocation();
+
+  // recheck location only when a search resukt sget updated
+  useEffect(() => {
+    getLocation();
+  }, [searchResults]);
 
   async function manuallyGetLocation() {
+    console.log("app.js");
     let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {
       setLocationError("Permission to access location was denied");
@@ -61,8 +64,6 @@ export default function App() {
           {(props) => (
             <FindRestaurant
               {...props}
-              searchResults={searchResults}
-              storeSearchResults={passSearchResults}
               addToSavedRestaurants={updateSavedRestaurants}
               manuallyGetLocation={manuallyGetLocation}
               userLocation={userLocation}

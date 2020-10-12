@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import SearchInput from "../components/SearchInput";
 import axios from "axios";
@@ -10,6 +10,7 @@ const FindRestaurant = (props) => {
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchError, setSearchError] = useState(false);
+  const [fakeText, setFakeText] = useState("fake");
 
   const closeModalHandler = () => {
     setModalVisible(false);
@@ -19,6 +20,10 @@ const FindRestaurant = (props) => {
   const saveRestaurant = (restaurant) => {
     props.addToSavedRestaurants(restaurant);
   };
+
+  useEffect(() => {
+    props.manuallyGetLocation();
+  }, [searchResults]);
 
   async function searchForRestaurant(searchQuery) {
     //for the post URL, make sure its your IP adress for development. Localhost only works for iPhone, not android.
@@ -57,7 +62,6 @@ const FindRestaurant = (props) => {
       <SearchInput
         style={styles.container}
         searchForRestaurant={searchForRestaurant}
-        manuallyGetLocation={props.manuallyGetLocation}
         getRandomRestaurant={getRandomRestaurant}
       />
       {props.userLocation ? (
