@@ -10,7 +10,9 @@ const DisplayReviews = (props) => {
   async function searchForReviews(alias) {
     let reviews;
     await axios
-      .post("http://192.168.1.11:3000/api/reviews", { restaurantName: alias })
+      .post("https://hidden-lowlands-65076.herokuapp.com/api/reviews", {
+        restaurantName: alias,
+      })
       .then((res) => {
         reviews = res.data.reviews;
         reviews.length > 1
