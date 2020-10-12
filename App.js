@@ -24,7 +24,6 @@ export default function App() {
   }, [searchResults]);
 
   async function manuallyGetLocation() {
-    console.log("app.js");
     let { status } = await Location.requestPermissionsAsync();
     if (status !== "granted") {
       setLocationError("Permission to access location was denied");
