@@ -10,7 +10,6 @@ const FindRestaurant = (props) => {
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchError, setSearchError] = useState(false);
-  const [fakeText, setFakeText] = useState("fake");
 
   const closeModalHandler = () => {
     setModalVisible(false);
