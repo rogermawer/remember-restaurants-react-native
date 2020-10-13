@@ -3,10 +3,10 @@ import {
   StyleSheet,
   TextInput,
   View,
-  Button,
   Text,
   TouchableOpacity,
 } from "react-native";
+import Colors from "../constants/Colors";
 
 const SearchInput = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,9 +47,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttons: {
-    backgroundColor: "#40d665",
+    backgroundColor: Colors.wtfGreen,
     padding: 10,
     marginVertical: 10,
+    borderRadius: 10,
   },
   buttonContainer: {
     marginVertical: 20,

@@ -4,12 +4,14 @@ import SearchInput from "../components/SearchInput";
 import axios from "axios";
 import SearchResults from "../components/SearchResults";
 import ModalPopUp from "../components/ModalPopUp";
+import LoadingScreen from "../components/LoadingScreen";
 
 const FindRestaurant = (props) => {
   const [searchResults, storeSearchResults] = useState([]);
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchError, setSearchError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeModalHandler = () => {
     setModalVisible(false);
@@ -22,11 +24,12 @@ const FindRestaurant = (props) => {
 
   useEffect(() => {
     props.manuallyGetLocation();
-  }, [searchResults]);
+  }, [searchResults]); //run only if searchResults changes
 
   async function searchForRestaurant(searchQuery) {
     //for the post URL, make sure its your IP adress for development. Localhost only works for iPhone, not android.
     let data;
+    setIsLoading(true);
     await axios
       .post("https://hidden-lowlands-65076.herokuapp.com/api/search", {
         term: searchQuery,
@@ -40,6 +43,7 @@ const FindRestaurant = (props) => {
       .catch((err) => {
         setSearchError("error searching");
       });
+    setIsLoading(false);
     return data;
   }
 
@@ -97,7 +101,7 @@ const FindRestaurant = (props) => {
     );
   }
 
-  // if random restaurant was found, open a modal with its info
+  // if random restaurant was called, open a modal with its info
   let modalView;
   if (randomRestaurant) {
     modalView = (
@@ -108,6 +112,10 @@ const FindRestaurant = (props) => {
         modalVisible={modalVisible}
       />
     );
+  }
+
+  if (isLoading) {
+    currentView = <LoadingScreen />;
   }
 
   return (

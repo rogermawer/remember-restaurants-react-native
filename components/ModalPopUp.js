@@ -6,6 +6,7 @@ import {
   Modal,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 //dependencies
@@ -14,6 +15,7 @@ import openMap from "react-native-open-maps";
 
 //components
 import DisplayReviews from "./DisplayReviews";
+import Colors from "../constants/Colors";
 
 const ModalPopUp = (props) => {
   const sendUserToLocation = (lat, long, address, name) => {
@@ -25,8 +27,10 @@ const ModalPopUp = (props) => {
       animationType="slide"
       visible={props.modalVisible}
       onDismiss={props.setSelectedRestaurant.bind(this, null)}
+      onRequestClose={props.setSelectedRestaurant.bind(this, null)} //android back button
+      statusBarTranslucent={true} //removes mysterious status bar on android
     >
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
@@ -60,10 +64,14 @@ const ModalPopUp = (props) => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={props.setModalVisible.bind(this, false)}>
-            <Text>See More Results</Text>
+          <TouchableOpacity
+            style={styles.buttons}
+            onPress={props.setModalVisible.bind(this, false)}
+          >
+            <Text style={styles.buttonText}>See More Results</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.buttons}
             onPress={() =>
               sendUserToLocation(
                 props.selectedRestaurant.coordinates.latitude,
@@ -73,10 +81,10 @@ const ModalPopUp = (props) => {
               )
             }
           >
-            <Text>Go Here!</Text>
+            <Text style={styles.buttonText}>Go Here!</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 };
@@ -99,6 +107,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-around",
+  },
+  buttons: {
+    borderRadius: 10,
+    padding: 10,
+    width: 140,
+    backgroundColor: Colors.wtfGreen,
+  },
+  buttonText: {
+    textAlign: "center",
   },
   imageContainer: {
     paddingHorizontal: 10,
