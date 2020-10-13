@@ -6,7 +6,7 @@ import SearchResults from "../components/SearchResults";
 import ModalPopUp from "../components/ModalPopUp";
 import LoadingScreen from "../components/LoadingScreen";
 
-const FindRestaurant = (props) => {
+const FindRestaurant = (props, navigation) => {
   const [searchResults, storeSearchResults] = useState([]);
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,6 +21,15 @@ const FindRestaurant = (props) => {
   const saveRestaurant = (restaurant) => {
     props.addToSavedRestaurants(restaurant);
   };
+
+  useEffect(() => {
+    const resetSearch = props.navigation.addListener("tabLongPress", (e) => {
+      // Prevent default behavior
+      storeSearchResults([]); //reset search by passing empty array
+    });
+
+    return resetSearch;
+  }, [navigation]);
 
   useEffect(() => {
     props.manuallyGetLocation();
@@ -89,10 +98,10 @@ const FindRestaurant = (props) => {
   if (searchResults.length > 0 && randomRestaurant === null) {
     currentView = (
       <View style={styles.container}>
-        <Button
+        {/* <Button
           title="or try another search"
           onPress={() => storeSearchResults([])}
-        />
+        /> */}
         <SearchResults
           setSavedRestaurant={saveRestaurant}
           searchResults={searchResults}
