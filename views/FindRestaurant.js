@@ -12,6 +12,7 @@ const FindRestaurant = (props, navigation) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchError, setSearchError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState({ limit: 50, price: 4 });
 
   const closeModalHandler = () => {
     setModalVisible(false);
@@ -22,6 +23,7 @@ const FindRestaurant = (props, navigation) => {
     props.addToSavedRestaurants(restaurant);
   };
 
+  //reset search on long press of tab browser
   useEffect(() => {
     const resetSearch = props.navigation.addListener("tabLongPress", (e) => {
       // Prevent default behavior
@@ -40,10 +42,11 @@ const FindRestaurant = (props, navigation) => {
     let data;
     setIsLoading(true);
     await axios
-      .post("https://hidden-lowlands-65076.herokuapp.com/api/search", {
+      .post("http://192.168.1.11:3000/api/search", {
         term: searchQuery,
         latitude: props.userLocation.coords.latitude,
         longitude: props.userLocation.coords.longitude,
+        ...filters,
       })
       .then((res) => {
         storeSearchResults(res.data);

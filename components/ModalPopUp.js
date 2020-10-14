@@ -23,6 +23,8 @@ const ModalPopUp = (props) => {
     openMap({ latitude: lat, longitude: long, query: name, end: address });
   };
 
+  var deviceWidth = Dimensions.get("window").width;
+
   return (
     <Modal
       animationType="slide"
@@ -32,10 +34,14 @@ const ModalPopUp = (props) => {
       statusBarTranslucent={true} //removes mysterious status bar on android
     >
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={{ width: "100%" }}>
+        <ScrollView>
           <View style={styles.imageContainer}>
             <Image
-              style={styles.image}
+              style={{
+                resizeMode: "contain",
+                width: deviceWidth - 20,
+                height: 300,
+              }}
               source={{ uri: props.selectedRestaurant.image_url }}
             />
           </View>
@@ -94,26 +100,28 @@ const ModalPopUp = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 50,
     flex: 1,
+    marginVertical: 50,
     width: "100%",
-    alignItems: "center",
   },
   imageContainer: {
     paddingHorizontal: 10,
-    alignItems: "center",
+    width: "100%",
   },
   ratingContainer: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
   buttonContainer: {
+    width: "100%",
     marginVertical: 20,
     flexDirection: "row",
     justifyContent: "space-around",
   },
   infoContainer: {
+    width: "100%",
     paddingHorizontal: 10,
     alignItems: "center",
   },
@@ -126,10 +134,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
   },
-  image: {
-    width: "100%",
-    height: 360,
-  },
+
   title: {
     fontSize: 24,
     fontWeight: "bold",
